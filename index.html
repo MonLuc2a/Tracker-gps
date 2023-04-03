@@ -6,20 +6,197 @@
     <title>Itinéraire avec plusieurs points GPS</title>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <!--    <link href="index.css" rel="stylesheet">-->
     <style>
-        body {
+        /* Add some styles for the navbar */
+        nav {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        nav ul {
+            list-style-type: none;
             margin: 0;
             padding: 0;
+            text-align: center;
         }
+
+        nav li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        nav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        nav li a:hover {
+            background-color: #111;
+        }
+
         #map {
-            width: 100%;
-            height: 100vh;
+            width: 400px; /* Set the width to 400px */
+            height: 400px;
+            background-color: gray;
+            border: 2px solid gray;
+            border-radius: 5px;
+            display: inline-block;
+            float: left;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+
+        /* Add some styles for the list div */
+        #list {
+            width: 400px;
+            height: 400px;
+            background-color: #f2f2f2;
+            border: 2px solid gray;
+            border-radius: 5px;
+            float: right;
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        #list ul {
+            list-style: none;
+            padding: 0;
+            margin: auto;
+            width: 80%;
+            text-align: center;
+        }
+
+        #list ul li {
+            margin-bottom: 10px;
+        }
+
+        #list ul li a {
+            display: block;
+            padding: 5px;
+            background-color: #ddd;
+            color: #333;
+            text-decoration: none;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #list ul li a:hover {
+            background-color: #aaa;
+            color: white;
+        }
+
+        /* Add some styles for the info div */
+        #info {
+            width: 400px; /* Set the width to 400px */
+            height: 400px;
+            background-color: #f2f2f2;
+            border: 2px solid gray;
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 20px;
+            float: left;
+            margin-bottom: 20px;
+            position: relative;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        /* Add some styles for the main content */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            /* Adjust styles for small screens */
+            main {
+                padding: 10px;
+            }
+            #map, #list, #info {
+                display: block;
+                width: 100%;
+                height: 400px;
+            }
+        }
+
+        /* Add some styles for the body element */
+        body {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
-<div id="map"></div>
+<header>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Journey</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div id="map"></div>
+    <div id="list">
+        <h2>List of Maps</h2>
+        <ul>
+            <li><a href="#" class="journey-link" data-journey="ajaccio-corte">Ajaccio - Corte</a></li>
+            <li><a href="#" class="journey-link" data-journey="toulouse-montpellier">Toulouse - Montpellier</a></li>
+        </ul>
+    </div>
+    <div id="info">
+        <h2>Info</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor augue nibh, nec tincidunt metus rhoncus eu. Nam in ante in erat molestie feugiat eu vel justo. Fusce elementum enim id eros luctus interdum. Mauris feugiat, arcu at imperdiet fermentum, est augue laoreet ipsum, vel iaculis sapien elit a elit. Mauris ac justo ipsum. In hac habitasse platea dictumst. Vestibulum vitae mollis magna.</p>
+    </div>
+</main>
 <script>
+    const journeyLinks = document.querySelectorAll('.journey-link');
+
+    journeyLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const journey = link.dataset.journey;
+
+            map.flyTo({
+                center: journeys[journey].center,
+                zoom: journeys[journey].zoom,
+                essential: true
+            });
+
+            addRoute(journeys[journey].coordinates);
+        });
+    });
+
+    const journeys = {
+        'ajaccio-corte': {
+            center: [8.78096, 42.08719],
+            zoom: 10,
+            coordinates: [
+                [8.737625, 41.919229],
+                [8.841647, 42.112946]
+            ]
+        },
+        'toulouse-montpellier': {
+            center: [3.876716, 43.610769],
+            zoom: 10,
+            coordinates: [
+                [1.444246, 43.604652],
+                [3.873869, 43.61092]
+            ]
+        }
+    };
+
     mapboxgl.accessToken = 'pk.eyJ1IjoiY29kZS1leCIsImEiOiJjbGZmdjU2cjQwNjYyM3BxcXN1eXF2aHhpIn0.t5von1gFzaJkdXGU-cqUCg';
 
     const map = new mapboxgl.Map({
@@ -29,16 +206,16 @@
         zoom: 12
     });
 
-    const coordinates = [
-        [8.742265,41.933695],
-        [9.365199, 42.516467]
-        // [2.295028, 48.873779],
-        // [2.321901, 48.861243],
-        // [2.339858, 48.856505],
-        // [2.362918, 48.847232]
-    ];
+    function addRoute(coordinates) {
+        if (map.getLayer('route')) {
+            map.removeLayer('route');
+            map.removeSource('route');
+        }
 
-    function getRoute() {
+        getRoute(coordinates);
+    }
+
+    function getRoute(coordinates) {
         const waypoints = coordinates.map(coord => {
             return `${coord[0]},${coord[1]}`;
         }).join(';');
@@ -76,7 +253,7 @@
     }
 
     map.on('load', function () {
-        getRoute();
+        addRoute(journeys['ajaccio-corte'].coordinates);
     });
 </script>
 </body>

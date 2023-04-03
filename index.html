@@ -6,7 +6,7 @@
     <title>Itinéraire avec plusieurs points GPS</title>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
-<!--    <link href="index.css" rel="stylesheet">-->
+    <!--    <link href="index.css" rel="stylesheet">-->
     <style>
         /* Add some styles for the navbar */
         nav {
@@ -163,31 +163,37 @@
 <script>
     const journeyLinks = document.querySelectorAll('.journey-link');
 
-    // add a click event listener to each journey link
     journeyLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            // get the journey data attribute value
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
             const journey = link.dataset.journey;
 
-            // create a new map object with the journey coordinates
-            const map = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/streets-v11',
+            map.flyTo({
                 center: journeys[journey].center,
-                zoom: journeys[journey].zoom
+                zoom: journeys[journey].zoom,
+                essential: true
             });
+
+            addRoute(journeys[journey].coordinates);
         });
     });
 
-    // define the journey coordinates
     const journeys = {
         'ajaccio-corte': {
             center: [8.78096, 42.08719],
-            zoom: 10
+            zoom: 10,
+            coordinates: [
+                [8.737625, 41.919229],
+                [8.841647, 42.112946]
+            ]
         },
         'toulouse-montpellier': {
             center: [3.876716, 43.610769],
-            zoom: 10
+            zoom: 10,
+            coordinates: [
+                [1.444246, 43.604652],
+                [3.873869, 43.61092]
+            ]
         }
     };
 
@@ -200,16 +206,16 @@
         zoom: 12
     });
 
-    const coordinates = [
-        [8.742265,41.933695],
-        [9.365199, 42.516467]
-        // [2.295028, 48.873779],
-        // [2.321901, 48.861243],
-        // [2.339858, 48.856505],
-        // [2.362918, 48.847232]
-    ];
+    function addRoute(coordinates) {
+        if (map.getLayer('route')) {
+            map.removeLayer('route');
+            map.removeSource('route');
+        }
 
-    function getRoute() {
+        getRoute(coordinates);
+    }
+
+    function getRoute(coordinates) {
         const waypoints = coordinates.map(coord => {
             return `${coord[0]},${coord[1]}`;
         }).join(';');
@@ -247,7 +253,7 @@
     }
 
     map.on('load', function () {
-        getRoute();
+        addRoute(journeys['ajaccio-corte'].coordinates);
     });
 </script>
 </body>

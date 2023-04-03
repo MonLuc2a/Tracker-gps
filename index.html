@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itinéraire avec plusieurs points GPS</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiY29kZS1leCIsImEiOiJjbGZmdjU2cjQwNjYyM3BxcXN1eXF2aHhpIn0.t5von1gFzaJkdXGU-cqUCg';
+
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [8.742265,41.933695],
+        zoom: 12
+    });
+
+    const coordinates = [
+        [8.742265,41.933695],
+        [9.365199, 42.516467]
+        // [2.295028, 48.873779],
+        // [2.321901, 48.861243],
+        // [2.339858, 48.856505],
+        // [2.362918, 48.847232]
+    ];
+
+    function getRoute() {
+        const waypoints = coordinates.map(coord => {
+            return `${coord[0]},${coord[1]}`;
+        }).join(';');
+
+        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${waypoints}?geometries=geojson&access_token=${mapboxgl.accessToken}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const route = data.routes[0].geometry;
+                map.addSource('route', {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'properties': {},
+                        'geometry': route
+                    }
+                });
+                map.addLayer({
+                    'id': 'route',
+                    'type': 'line',
+                    'source': 'route',
+                    'layout': {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    'paint': {
+                        'line-color': '#3887be',
+                        'line-width': 5,
+                        'line-opacity': 0.75
+                    }
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
+
+    map.on('load', function () {
+        getRoute();
+    });
+</script>
+</body>
+</html>

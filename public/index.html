@@ -142,7 +142,7 @@
         <ul>
             <li><a href="#">Home</a></li>
             <li><a href="#">Journey</a></li>
-            <li><a href="#">Settings</a></li>
+            <li><a href="#" id="settings-btn">Settings</a></li>
         </ul>
     </nav>
 </header>
@@ -255,6 +255,33 @@
     map.on('load', function () {
         addRoute(journeys['ajaccio-corte'].coordinates);
     });
+
+    // Sélectionnez le lien Settings dans la barre de navigation
+    const settingsLink = document.querySelector("nav li a[href='#Settings']");
+
+    // Ajoutez un gestionnaire d'événements "click" au lien Settings
+    settingsLink.addEventListener("click", (event) => {
+        event.preventDefault(); // Empêche le comportement par défaut de la navigation
+
+        // Exécutez le script côté serveur
+        fetch('/run-script')
+            .then((response) => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Une erreur s\'est produite lors de l\'exécution du script');
+                }
+            })
+            .then((result) => {
+                console.log(result);
+                alert('Le script a été exécuté avec succès');
+            })
+            .catch((error) => {
+                console.error('Erreur:', error);
+                alert(`Erreur: ${error.message}`);
+            });
+    });
+
 </script>
 </body>
 </html>

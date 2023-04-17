@@ -1,20 +1,33 @@
 const express = require('express');
-const { exec } = require('child_process');
-const app = express();
-const port = 3000;
+const cors = require('cors');
 
-app.get('/run-script', (req, res) => {
-    exec('sh git.sh', (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error: ${error}`);
-            return res.status(500).send(`Error: ${error}`);
-        }
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-        res.send('Script executed successfully');
-    });
+const app = express();
+app.use(cors());
+
+const journeys = {
+    'ajaccio-corte': {
+        center: [8.78096, 42.08719],
+        zoom: 10,
+        coordinates: [
+            [8.737625, 41.919229],
+            [8.841647, 42.112946],
+        ],
+    },
+    'toulouse-montpellier': {
+        center: [3.876716, 43.610769],
+        zoom: 10,
+        coordinates: [
+            [1.444246, 43.604652],
+            [3.873869, 43.61092],
+        ],
+    },
+};
+
+app.get('/journeys', (req, res) => {
+    res.json(journeys);
 });
 
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
+    console.log(`API listening on port ${port}`);
 });

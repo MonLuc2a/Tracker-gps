@@ -161,41 +161,53 @@
     </div>
 </main>
 <script>
-    const journeyLinks = document.querySelectorAll('.journey-link');
+    function setupJourneyLinks(journeys) {
+        const journeyLinks = document.querySelectorAll('.journey-link');
 
-    journeyLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const journey = link.dataset.journey;
+        journeyLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const journeyId = link.dataset.journey;
 
-            map.flyTo({
-                center: journeys[journey].center,
-                zoom: journeys[journey].zoom,
-                essential: true
+                if (journeys[journeyId]) {
+                    map.flyTo({
+                        center: journeys[journeyId].center,
+                        zoom: journeys[journeyId].zoom,
+                        essential: true
+                    });
+
+                    addRoute(journeys[journeyId].coordinates);
+                } else {
+                    console.error('Erreur: Itinéraire introuvable.');
+                }
             });
-
-            addRoute(journeys[journey].coordinates);
         });
-    });
+    }
 
-    const journeys = {
-        'ajaccio-corte': {
-            center: [8.78096, 42.08719],
-            zoom: 10,
-            coordinates: [
-                [8.737625, 41.919229],
-                [8.841647, 42.112946]
-            ]
-        },
-        'toulouse-montpellier': {
-            center: [3.876716, 43.610769],
-            zoom: 10,
-            coordinates: [
-                [1.444246, 43.604652],
-                [3.873869, 43.61092]
-            ]
+
+    async function fetchJourneys() {
+        try {
+            const response = await fetch('http://localhost:3000/journeys');
+            const journeys = await response.json();
+            return journeys;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des données de trajet:', error);
         }
-    };
+    }
+
+    // Appelez la fonction fetchJourneys() au chargement de la page
+    (async function () {
+        const journeys = await fetchJourneys();
+        if (journeys) {
+            // Initialisez les données de trajet et configurez les gestionnaires d'événements
+            setupJourneyLinks(journeys);
+            map.on('load', function () {
+                if (journeys['ajaccio-corte']) {
+                    addRoute(journeys['ajaccio-corte'].coordinates);
+                }
+            });
+        }
+    })();
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiY29kZS1leCIsImEiOiJjbGZmdjU2cjQwNjYyM3BxcXN1eXF2aHhpIn0.t5von1gFzaJkdXGU-cqUCg';
 
@@ -253,7 +265,7 @@
     }
 
     map.on('load', function () {
-        addRoute(journeys['ajaccio-corte'].coordinates);
+        // addRoute(journeys['ajaccio-corte'].coordinates);
     });
 
     // Sélectionnez le lien Settings dans la barre de navigation

@@ -17,13 +17,18 @@ Arduino :
 Création serveur :
 1.	Création api (9/15) : 
 >	Stockage des points gps (2/5)
+
 >	Manipulation de données afin d’obtenir des trajets / vitesse (4/5)
+
 >	Accès aux données en ligne (3/5)
 
 2.	Création serveur web (12/20) : 
 >	Mise en place Proxmox pour une VM (3/5)
+
 >	Mise en place serveur Apache (1/5)
+
 >	Création des pages internet (3/5)
+
 >	Liaison des données et de la page web (5/5)
 
 Matériels : 

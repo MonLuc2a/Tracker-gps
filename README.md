@@ -32,15 +32,23 @@ Création serveur :
 >	Liaison des données et de la page web (5/5)
 
 Matériels : 
+
 Esp32 / Raspberry Py / Arduino
+
 Module GPS
+
 Batterie 
+
 PC pour faire un serveur
 
 
 Logiciels : 
+
 IDE Arduino pour programmer l'ESP32
+
 Langages de programmation tels que C++ et Python pour le traitement et la manipulation des données
+
 Protocoles de communication tels que MQTT pour l'envoi des données au serveur
+
 Base de données pour stocker les données
 

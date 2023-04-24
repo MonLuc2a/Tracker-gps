@@ -4,8 +4,10 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-const journeys = {
-    'ajaccio-corte': {
+const journeys = [
+    {
+        id: '1',
+        name: 'Ajaccio - Corte',
         center: [8.78096, 42.08719],
         zoom: 10,
         coordinates: [
@@ -13,7 +15,9 @@ const journeys = {
             [8.841647, 42.112946],
         ],
     },
-    'toulouse-montpellier': {
+    {
+        id: '2',
+        name: 'Toulouse - Montpellier',
         center: [3.876716, 43.610769],
         zoom: 10,
         coordinates: [
@@ -21,7 +25,19 @@ const journeys = {
             [3.873869, 43.61092],
         ],
     },
-};
+    {
+        id: '3',
+        name: 'Toulouse - Bordeaux',
+        center: [-0.57918, 44.837789],
+        zoom: 10,
+        coordinates: [
+            [1.444246, 43.604652],
+            [-0.57918, 44.837789],
+        ],
+    },
+];
+
+
 
 app.get('/journeys', (req, res) => {
     res.json(journeys);

@@ -151,8 +151,6 @@
     <div id="list">
         <h2>List of Maps</h2>
         <ul>
-            <li><a href="#" class="journey-link" data-journey="ajaccio-corte">Ajaccio - Corte</a></li>
-            <li><a href="#" class="journey-link" data-journey="toulouse-montpellier">Toulouse - Montpellier</a></li>
         </ul>
     </div>
     <div id="info">
@@ -164,26 +162,30 @@
     function setupJourneyLinks(journeys) {
         const journeyLinks = document.querySelectorAll('.journey-link');
 
+        function findJourneyById(journeyId) {
+            return journeys.find(journey => journey.id === journeyId);
+        }
+
         journeyLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const journeyId = link.dataset.journey;
 
-                if (journeys[journeyId]) {
+                const journey = findJourneyById(journeyId);
+                if (journey) {
                     map.flyTo({
-                        center: journeys[journeyId].center,
-                        zoom: journeys[journeyId].zoom,
+                        center: journey.center,
+                        zoom: journey.zoom,
                         essential: true
                     });
 
-                    addRoute(journeys[journeyId].coordinates);
+                    addRoute(journey.coordinates);
                 } else {
                     console.error('Erreur: Itinéraire introuvable.');
                 }
             });
         });
     }
-
 
     async function fetchJourneys() {
         try {
@@ -199,23 +201,19 @@
     (async function () {
         const journeys = await fetchJourneys();
         if (journeys) {
-            // Initialisez les données de trajet et configurez les gestionnaires d'événements
+            populateJourneyList(journeys);
             setupJourneyLinks(journeys);
-            map.on('load', function () {
-                if (journeys['ajaccio-corte']) {
-                    addRoute(journeys['ajaccio-corte'].coordinates);
-                }
-            });
         }
     })();
+
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiY29kZS1leCIsImEiOiJjbGZmdjU2cjQwNjYyM3BxcXN1eXF2aHhpIn0.t5von1gFzaJkdXGU-cqUCg';
 
     const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [8.742265,41.933695],
-        zoom: 12
+        center: [2.349014, 46.603354], // Coordonnées de la France
+        zoom: 4 // Niveau de zoom pour afficher la France
     });
 
     function addRoute(coordinates) {
@@ -264,9 +262,6 @@
             .catch(error => console.error('Erreur:', error));
     }
 
-    map.on('load', function () {
-        // addRoute(journeys['ajaccio-corte'].coordinates);
-    });
 
     // Sélectionnez le lien Settings dans la barre de navigation
     const settingsLink = document.querySelector("nav li a[href='#Settings']");
@@ -293,6 +288,23 @@
                 alert(`Erreur: ${error.message}`);
             });
     });
+
+    function populateJourneyList(journeys) {
+        const journeyList = document.querySelector("#list ul");
+
+        for (const journey of journeys) {
+            const listItem = document.createElement("li");
+            const link = document.createElement("a");
+            link.href = "#";
+            link.classList.add("journey-link");
+            link.dataset.journey = journey.id;
+            link.textContent = journey.name || "Unknown Journey";
+            listItem.appendChild(link);
+            journeyList.appendChild(listItem);
+        }
+    }
+
+
 
 </script>
 </body>

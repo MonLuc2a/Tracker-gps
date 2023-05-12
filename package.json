@@ -1,0 +1,16 @@
+{
+  "name": "server.js",
+  "version": "1.0.0",
+  "description": "Lucas Custos / Maxime Lubrano / Lucas Monribot\r Le module récupère les données des trajets, on le branche à un pc qui envoie les données sur un serveur (programme automatisation) pour y accéder depuis internet en l’affichant sur une carte.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

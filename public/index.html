@@ -195,11 +195,15 @@
         try {
             const response = await fetch('http://localhost:3000/journeys');
             const journeys = await response.json();
+            // inverse l'ordre des trajets pour afficher les plus récents en premier
+            journeys.sort((a, b) => b.id - a.id);
+
             return journeys;
         } catch (error) {
             console.error('Erreur lors de la récupération des données de trajet:', error);
         }
     }
+
 
     // Appelez la fonction fetchJourneys() au chargement de la page
     (async function () {
@@ -296,7 +300,8 @@
     function populateJourneyList(journeys) {
         const journeyList = document.querySelector("#list ul");
 
-        for (const journey of journeys) {
+        for (let i = 0; i < 8 && i < journeys.length; i++) {
+            const journey = journeys[i];
             const listItem = document.createElement("li");
             const link = document.createElement("a");
             link.href = "#";
@@ -307,6 +312,7 @@
             journeyList.appendChild(listItem);
         }
     }
+
 
 
 

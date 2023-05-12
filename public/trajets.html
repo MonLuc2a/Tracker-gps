@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trajets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itinéraire avec plusieurs points GPS</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <style>
+        /* Add some styles for the navbar */
+        nav {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        nav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        nav li a:hover {
+            background-color: #111;
+        }
+
+        #map {
+            width: 400px; /* Set the width to 400px */
+            height: 400px;
+            background-color: gray;
+            border: 2px solid gray;
+            border-radius: 5px;
+            display: inline-block;
+            float: left;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+
+        /* Add some styles for the list div */
+        #list {
+            width: 400px;
+            height: 400px;
+            background-color: #f2f2f2;
+            border: 2px solid gray;
+            border-radius: 5px;
+            float: right;
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        #list ul {
+            list-style: none;
+            padding: 0;
+            margin: auto;
+            width: 80%;
+            text-align: center;
+        }
+
+        #list ul li {
+            margin-bottom: 10px;
+        }
+
+        #list ul li a {
+            display: block;
+            padding: 5px;
+            background-color: #ddd;
+            color: #333;
+            text-decoration: none;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #list ul li a:hover {
+            background-color: #aaa;
+            color: white;
+        }
+
+        /* Add some styles for the info div */
+        #info {
+            width: 400px; /* Set the width to 400px */
+            height: 400px;
+            background-color: #f2f2f2;
+            border: 2px solid gray;
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 20px;
+            float: left;
+            margin-bottom: 20px;
+            position: relative;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        /* Add some styles for the main content */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            /* Adjust styles for small screens */
+            main {
+                padding: 10px;
+            }
+            #map, #list, #info {
+                display: block;
+                width: 100%;
+                height: 400px;
+            }
+        }
+
+        /* Add some styles for the body element */
+        body {
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Acceuil</a></li>
+            <li><a href="trajets.html">Trajets</a></li>
+            <li><a href="settings.html" id="settings-btn">Réglages</a></li>
+        </ul>
+    </nav>
+</header>
+</body>
+</html>

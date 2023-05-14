@@ -1,4 +1,4 @@
-# Tracker-gps
+# TripTrack
 
 Lucas Custos / Maxime Lubrano / Lucas Monribot
 Le module récupère les données des trajets, on le branche à un pc qui envoie les données sur un serveur (programme automatisation) pour y accéder depuis internet en l’affichant sur une carte. 
